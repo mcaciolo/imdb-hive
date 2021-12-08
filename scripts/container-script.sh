@@ -1,7 +1,10 @@
 #!/bin/bash
 
-local_dir="./data"
+SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+local_dir="${SCRIPT_DIR}/data"
 hdfs_dir="/imdb"
+
 file_to_download=("name.basics" "title.akas" "title.basics" "title.crew" "title.episode" "title.principals" "title.ratings")
 
 if ! dpkg -s wget &> /dev/null; then
@@ -37,5 +40,4 @@ do
 done
 
 echo "Initializing imdb database"
-hive -f init-script.hql
-
+hive -hivevar "DATAPATH=$hdfs_dir/" -f "${SCRIPT_DIR}/init-script.hql"

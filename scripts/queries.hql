@@ -1,3 +1,5 @@
+USE imdb;
+
 -- 22 seconds
 SELECT region, COUNT(titleId) AS nbr_titles 
 FROM title_akas 

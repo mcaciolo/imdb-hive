@@ -2,8 +2,10 @@
 
 SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
-local_dir=$1
-gs_dir=$2
+cluster_name=$1
+region_name=$2
+local_dir=$3
+gs_dir=$4
 file_to_download=("name.basics" "title.akas" "title.basics" "title.crew" "title.episode" "title.principals" "title.ratings")
 
 if [ ! -d "${local_dir}" ]; then 
@@ -25,12 +27,12 @@ do
         echo "Tranfering ${file}.tsv to gs"
         gsutil cp "${file}.tsv" "${gs_dir}/${file}/"
     else
-        echo "${file}.tsv already existing in hdfs"
+        echo "${file}.tsv already existing in gs"
     fi
 done
 
 gcloud dataproc jobs submit hive \
-            --cluster my-hadoop-cluster \
-            --region europe-central2 \
+            --cluster "${cluster_name}" \
+            --region "${region_name}" \
             --file "${SCRIPT_DIR}/init-script.hql" \
-            --properties="DATAPATH=${gs_dir}/"
+            --params="DATAPATH=${gs_dir}/"

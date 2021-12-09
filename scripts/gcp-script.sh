@@ -1,5 +1,7 @@
 #!/bin/bash
 
+SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
 local_dir=$1
 gs_dir=$2
 file_to_download=("name.basics" "title.akas" "title.basics" "title.crew" "title.episode" "title.principals" "title.ratings")
@@ -26,3 +28,9 @@ do
         echo "${file}.tsv already existing in hdfs"
     fi
 done
+
+gcloud dataproc jobs submit hive \
+            --cluster my-hadoop-cluster \
+            --region europe-central2 \
+            --file "${SCRIPT_DIR}/init-script.hql" \
+            --properties="DATAPATH=${gs_dir}/"

@@ -4,8 +4,9 @@ SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 cluster_name=$1
 region_name=$2
-local_dir=$3
-gs_dir=$4
+gs_dir="gs://$3"
+
+local_dir='./data'
 file_to_download=("name.basics" "title.akas" "title.basics" "title.crew" "title.episode" "title.principals" "title.ratings")
 
 if [ ! -d "${local_dir}" ]; then 
